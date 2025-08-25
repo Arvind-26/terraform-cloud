@@ -9,7 +9,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -111,8 +111,8 @@ resource "aws_security_group" "web_sg" {
 
 # Launch an EC2 Instance in the Public Subnet
 resource "aws_instance" "web_server" {
-  ami                    = "ami-020cba7c55df1f615"
-  instance_type          = "t2.micro"
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]  # Changed from security_groups
   tags = {
@@ -144,8 +144,8 @@ resource "aws_security_group" "app_sg" {
 
 # Launch an EC2 Instance in the Private Subnet for Application Server
 resource "aws_instance" "app_server" {
-  ami                    = "ami-020cba7c55df1f615"
-  instance_type          = "t2.micro"
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
   subnet_id              = aws_subnet.private_subnet_server.id
   vpc_security_group_ids = [aws_security_group.app_sg.id]  # Changed from security_groups
   tags = {
